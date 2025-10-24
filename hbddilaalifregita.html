@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Happy Birthday, My Love ❤️</title>
+<style>
+body{
+  margin:0;display:flex;align-items:center;justify-content:center;
+  height:100vh;background:radial-gradient(circle at bottom,#0f172a,#1e293b 80%);
+  color:#fff;font-family:'Poppins','Segoe UI',sans-serif;overflow:hidden;
+  transition:background 2s ease,opacity 2s ease;
+}
+.fade-out{opacity:0;transition:opacity 2s ease;}
+.card{width:90%;max-width:780px;padding:30px;border-radius:20px;
+  background:rgba(255,255,255,0.05);box-shadow:0 10px 40px rgba(0,0,0,0.6);
+  text-align:center;z-index:10;}
+.title{font-size:clamp(24px,5vw,38px);color:#ffd6ea;margin-bottom:20px;}
+.name{font-size:clamp(28px,5vw,38px);font-weight:700;
+  background:linear-gradient(90deg,#ff7bcb,#ff92ef,#c18bff);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font-family:'Pacifico',cursive;margin-bottom:26px;}
+.type{font-family:'Fira Code',monospace;background:rgba(255,255,255,0.05);
+  padding:14px;border-radius:8px;margin-top:20px;white-space:pre-wrap;
+  font-size:clamp(14px,3.5vw,16px);color:#f1f5f9;min-height:100px;}
+.btn{margin-top:20px;padding:12px 20px;border-radius:12px;background:#ff6b9f;
+  border:none;cursor:pointer;color:#fff;font-weight:600;font-size:clamp(14px,4vw,15px);
+  transition:transform .2s ease,background .2s ease;}
+.btn:hover{transform:scale(1.05);background:#ff8fbf;}
+.from{font-size:clamp(12px,3vw,14px);margin-top:15px;color:#a5b4fc;}
+.from span{display:block;font-size:clamp(16px,4vw,20px);font-weight:600;color:#ffd6ea;margin-top:4px;}
+canvas#fireworks{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* Lilin Scene */
+.candle-scene{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at bottom,#0f172a,#1e293b 80%);
+  color:#ffd6ea;opacity:0;pointer-events:none;transition:opacity 2s ease;
+}
+.candle-scene.active{opacity:1;pointer-events:auto;}
+
+.candle{
+  position:relative;display:flex;flex-direction:column;align-items:center;
+}
+.wax{
+  width:80px;height:180px;background:#fff0f8;border-radius:16px;
+  box-shadow:0 0 20px rgba(255,182,193,0.4),0 4px 10px rgba(0,0,0,.3);
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.wax::after{
+  content:"";position:absolute;bottom:-10px;left:0;right:0;height:10px;
+  background:rgba(255,255,255,0.15);border-radius:50%;
+  filter:blur(6px);
+}
+.flame{
+  width:28px;height:42px;background:radial-gradient(ellipse at center,#ffcf33 10%,#ff7a00 70%);
+  border-radius:50%;position:absolute;top:-48px;left:50%;transform:translateX(-50%);
+  animation:flicker .15s infinite alternate;
+}
+.flame.out{animation:none;opacity:0;transition:opacity 1s ease;}
+.number{
+  font-size:42px;font-weight:700;color:#ff3d88;
+  text-shadow:0 0 8px #ff7ab5;
+  z-index:2;
+}
+.message{
+  margin-top:40px;font-size:22px;font-weight:500;color:#ffd6ea;
+  opacity:0;transition:opacity 2s ease;text-align:center;
+}
+.message.show{opacity:1;}
+@keyframes flicker{
+  0%{transform:translateX(-50%) scale(1);opacity:.9;}
+  100%{transform:translateX(-50%) scale(1.1);opacity:1;}
+}
+@keyframes smoke{
+  0%{opacity:1;transform:translateY(0) scale(1);}
+  100%{opacity:0;transform:translateY(-60px) scale(1.2);}
+}
+.smoke{
+  position:absolute;top:-50px;left:50%;transform:translateX(-50%);
+  width:20px;height:40px;
+  background:radial-gradient(ellipse at center,rgba(255,255,255,.6),transparent 70%);
+  border-radius:50%;animation:smoke 2s ease-out forwards;
+}
+
+/* Mobile adjust */
+@media (max-width:600px){
+  .title{
+    line-height:1.4;
+    font-size:8.5vw;
+  }
+  .mobile-break{
+    display:inline;
+  }
+  .name{font-size:7vw;}
+  .type{font-size:4vw;margin:20px 0;}
+  .btn{font-size:4.2vw;}
+}
+@media (min-width:601px){
+  .mobile-break{
+    display:none;
+  }
+}
+</style>
+</head>
+<body>
+<canvas id="fireworks"></canvas>
+
+<div class="card" id="card">
+  <h1 class="title">
+    Selamat <span class="mobile-break"><br></span>
+    Ulang Tahun <span class="mobile-break"><br></span>
+    Sayang! 🎂
+  </h1>
+  <div class="name">Dila Alif Regita</div>
+  <div class="type" id="typewriter"></div>
+  <button class="btn" onclick="surprise()">💖 Klik untuk Kejutan</button>
+  <div class="from">Dari yang mencintaimu selalu 💖<span>Firman Primawan</span></div>
+</div>
+
+<div class="candle-scene" id="scene">
+  <div class="candle">
+    <div class="flame"></div>
+    <div class="wax"><div class="number">20</div></div>
+  </div>
+  <div class="message" id="candleMsg">Tiup untuk memadamkan lilin 🎂</div>
+</div>
+
+<script>
+// efek mengetik (romantis untuk calon istri)
+const text=`Selamat ulang tahun, cintaku ❤️\n\nTerima kasih sudah jadi bagian terindah dalam hidupku. Aku bersyukur setiap hari karena Tuhan mempertemukanku denganmu.\n\nSemoga langkahmu selalu diselimuti kebahagiaan, kesehatan, dan cinta yang tak pernah pudar.\n\nHari ini bukan hanya milikmu, tapi juga milik kita — dua hati yang saling menemukan rumahnya. Aku mencintaimu, sekarang dan selalu. 💕`;
+const el=document.getElementById('typewriter');let i=0;
+function type(){if(i<text.length){el.textContent+=text[i++];setTimeout(type,25);} } type();
+
+// Love anim
+let loveActive=false;
+function createLove(){
+ const span=document.createElement('div');
+ span.textContent='💖';
+ span.style.position='fixed';span.style.left=Math.random()*100+'%';span.style.top=Math.random()*100+'%';
+ span.style.fontSize=(12+Math.random()*32)+'px';span.style.opacity=Math.random()*0.8+0.2;
+ span.style.transition='transform 6s ease-in-out, opacity 6s ease-in-out';
+ span.style.zIndex='2';
+ document.body.appendChild(span);
+ requestAnimationFrame(()=>{span.style.transform=`translate(${(Math.random()-0.5)*300}px, ${(Math.random()-0.5)*300}px) scale(${1+Math.random()}) rotate(${Math.random()*720}deg)`;span.style.opacity=0;});
+ setTimeout(()=>span.remove(),6000+Math.random()*1000);
+}
+
+// Fireworks
+const canvas=document.getElementById('fireworks');const ctx=canvas.getContext('2d');
+canvas.width=innerWidth;canvas.height=innerHeight;
+addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
+let fireworks=[];
+class Firework{
+ constructor(x,y,colors){this.x=x;this.y=y;this.colors=colors;this.particles=[];
+ for(let i=0;i<70;i++){const a=Math.random()*2*Math.PI,s=Math.random()*3+1;
+ const vx=Math.cos(a)*s,vy=Math.sin(a)*s;
+ this.particles.push({x:this.x,y:this.y,vx,vy,alpha:1,radius:Math.random()*2+1,color:this.colors[Math.floor(Math.random()*this.colors.length)]});}}
+ update(){this.particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.02;p.alpha-=0.008;});
+ this.particles=this.particles.filter(p=>p.alpha>0);}
+ draw(ctx){this.particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,2*Math.PI);
+ ctx.fillStyle=`rgba(${p.color},${p.alpha})`;ctx.fill();});}}
+function randomColor(){const c=["255,99,132","255,205,86","54,162,235","255,255,255","153,102,255"];return c[Math.floor(Math.random()*c.length)];}
+function launchFireworks(){setInterval(()=>{fireworks.push(new Firework(Math.random()*canvas.width,Math.random()*canvas.height/2,[randomColor()]));},1200);}
+function animate(){ctx.fillStyle='rgba(0,0,0,0.2)';ctx.fillRect(0,0,canvas.width,canvas.height);
+ fireworks.forEach(fw=>{fw.update();fw.draw(ctx);});fireworks=fireworks.filter(fw=>fw.particles.length>0);
+ requestAnimationFrame(animate);}animate();
+
+function surprise(){
+ if(loveActive)return;loveActive=true;
+ let loveCount=0;const loveInterval=setInterval(()=>{for(let j=0;j<10;j++)createLove();loveCount++;if(loveCount>20)clearInterval(loveInterval);},400);
+ launchFireworks();
+ setTimeout(()=>{document.getElementById('card').classList.add('fade-out');
+ setTimeout(()=>{showCandleScene();},2000);},5000);
+}
+
+// Lilin Scene
+function showCandleScene(){
+ document.getElementById('scene').classList.add('active');
+ setInterval(()=>{for(let j=0;j<5;j++)createLove();},800);
+ initMicDetection();
+}
+
+// Mic Blow Detection
+function initMicDetection(){
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert("Sensor mikrofon tidak tersedia 😢");return;}
+ navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+ const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ const analyser=audioCtx.createAnalyser();
+ const src=audioCtx.createMediaStreamSource(stream);
+ const data=new Uint8Array(analyser.frequencyBinCount);
+ src.connect(analyser);
+ function detect(){
+   analyser.getByteFrequencyData(data);
+   const vol=data.reduce((a,b)=>a+b,0)/data.length;
+   if(vol>50){blowOut(stream);}else requestAnimationFrame(detect);
+ }
+ detect();
+ });
+}
+
+function blowOut(stream){
+ const flame=document.querySelector('.flame');
+ flame.classList.add('out');
+ const s=document.createElement('div');
+ s.className='smoke';
+ flame.parentElement.appendChild(s);
+ document.getElementById('candleMsg').textContent="Selamat 20 Tahun Sayang 🎉";
+ document.getElementById('candleMsg').classList.add('show');
+ stream.getTracks().forEach(t=>t.stop());
+}
+</script>
+</body>
+</html>
